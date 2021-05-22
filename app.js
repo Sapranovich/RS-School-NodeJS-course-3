@@ -7,7 +7,7 @@ const game = require('./controllers/gamecontroller')
 const PORT = process.env.PORT || 8080;
 
 db.sync();
-app.use(require('body-parser'));
+app.use(require('body-parser').json());
 app.use('/api/auth', user);
 app.use(require('./middleware/validate-session'))
 app.use('/api/game', game);
