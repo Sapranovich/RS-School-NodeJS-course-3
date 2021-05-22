@@ -14,3 +14,20 @@ app.use('/api/game', game);
 app.listen(PORT, function() {
     console.log("App is listening on ", PORT);
 })
+
+
+// {
+//     "title": "Game1",
+//     "owner_id": 8,
+//     "studio": "Game1",
+//     "esrb_rating": 12345,
+//     "user_rating": 5,
+//     "have_played": false
+// }
+
+// {
+//     "full_name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+//     "username": "ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы",
+//     "password": "123qwe",
+//     "email": "Sapran@yand.ru"
+// }

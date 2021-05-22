@@ -3,10 +3,11 @@ const sequelize = require('../db');
 var User = sequelize.import('../models/user');
 
 module.exports = function (req, res, next) {
+    console.log('123', req.method)
     if (req.method == 'OPTIONS') {
         next();   // allowing options as a method for request
     } else {
-        var sessionToken = req.headers.authorization;
+        var sessionToken = req.headers.authorization.split(' ')[1];
         console.log(sessionToken);
         if (!sessionToken) return res.status(403).send({ auth: false, message: "No token provided." });
         else {
