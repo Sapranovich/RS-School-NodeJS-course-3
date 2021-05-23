@@ -1,19 +1,23 @@
-var router = Router();
-var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
+const { Router } = require("express");
+const router = Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { User } = require('../db');
+const  CONST = require('../Constants');
+require('dotenv').config();
 
-var User = require('../db').import('../models/user');
+const timeExpiresIn =  CONST.MINUTES_PER_HOUR * CONST.SECONDS_PER_MINUTE * CONST.HOURS_PER_DAY;
 
 router.post('/signup', (req, res) => {
     User.create({
-        full_name: req.body.user.full_name,
-        username: req.body.user.username,
-        passwordhash: bcrypt.hashSync(req.body.user.password, 10),
-        email: req.body.user.email,
+        full_name: req.body.full_name,
+        username: req.body.username,
+        passwordHash: bcrypt.hashSync(req.body.password, CONST.SALT),
+        email: req.body.email,
     })
         .then(
             function signupSuccess(user) {
-                let token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
+                let token = jwt.sign({ id: user.id }, process.env.SECRET_CODE, { expiresIn: timeExpiresIn });
                 res.status(200).json({
                     user: user,
                     token: token
@@ -27,11 +31,11 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/signin', (req, res) => {
-    User.findOne({ where: { username: req.body.user.username } }).then(user => {
+    User.findOne({ where: { email: req.body.email } }).then(user => {
         if (user) {
-            bcrypt.compare(req.body.user.password, user.passwordHash, function (err, matches) {
+            bcrypt.compare(req.body.password, user.passwordHash, function (err, matches) {
                 if (matches) {
-                    var token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', { expiresIn: 60 * 60 * 24 });
+                    const token = jwt.sign({ id: user.id }, process.env.SECRET_CODE, { expiresIn: timeExpiresIn });
                     res.json({
                         user: user,
                         message: "Successfully authenticated.",
