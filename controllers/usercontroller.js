@@ -35,7 +35,7 @@ router.post('/signin', (req, res) => {
         if (user) {
             bcrypt.compare(req.body.password, user.passwordHash, function (err, matches) {
                 if (matches) {
-                    var token = jwt.sign({ id: user.id }, process.env.SECRET_CODE, { expiresIn: timeExpiresIn });
+                    const token = jwt.sign({ id: user.id }, process.env.SECRET_CODE, { expiresIn: timeExpiresIn });
                     res.json({
                         user: user,
                         message: "Successfully authenticated.",

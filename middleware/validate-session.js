@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
-var { User } = require('../db');
+const { User } = require('../db');
 
 require('dotenv').config();
 module.exports = function (req, res, next) {
     if (req.method == 'OPTIONS') {
         next();   // allowing options as a method for request
     } else {
-        var sessionToken = req.headers.authorization.split(' ')[1];
+        const sessionToken = req.headers.authorization.split(' ')[1];
         console.log(sessionToken);
         if (!sessionToken) return res.status(403).send({ auth: false, message: "No token provided." });
         else {
